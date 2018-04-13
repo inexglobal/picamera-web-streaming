@@ -2,6 +2,7 @@ import io
 import picamera
 import logging
 import socketserver
+import os
 from threading import Condition
 from http import server
 
@@ -16,6 +17,8 @@ PAGE="""\
 </body>
 </html>
 """
+port = 8000
+GET_IP_CMD ="hostname -I" 
 
 class StreamingOutput(object):
 	def __init__(self):
@@ -80,8 +83,10 @@ with picamera.PiCamera(resolution='640x480', framerate=5) as camera:
 	output = StreamingOutput()
 	camera.start_recording(output, format='mjpeg')
 	try:
-		address = ('', 8000)
+		address = ('',port)
 		server = StreamingServer(address, StreamingHandler)
+		ip=os.popen(GET_IP_CMD).read()
+		print('Go to http://%s:%d' % (ip.strip(),port))
 		server.serve_forever()
 	finally:
 		camera.stop_recording()
