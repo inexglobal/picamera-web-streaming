@@ -86,7 +86,11 @@ with picamera.PiCamera(resolution='640x480', framerate=5) as camera:
 		address = ('',port)
 		server = StreamingServer(address, StreamingHandler)
 		ip=os.popen(GET_IP_CMD).read()
-		print('Go to http://%s:%d' % (ip.strip(),port))
+		ip=ip.split(' ')
+		ipLAN = ip[0]
+		ipWiFi = ip[1]
+		print('LAN : Go to http://%s:%d' % (ipLAN,port))
+		print('Wi-Fi : Go to http://%s:%d' % (ipWiFi,port))
 		server.serve_forever()
 	finally:
 		camera.stop_recording()
