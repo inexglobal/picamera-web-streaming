@@ -88,9 +88,9 @@ with picamera.PiCamera(resolution='640x480', framerate=5) as camera:
 		ip=os.popen(GET_IP_CMD).read()
 		ip=ip.split(' ')
 		ipLAN = ip[0]
-		ipWiFi = ip[1]
-		print('LAN : Go to http://%s:%d' % (ipLAN,port))
-		print('Wi-Fi : Go to http://%s:%d' % (ipWiFi,port))
+		ipWiFi = ip[1] if len(ip[1])<3 else "localhost"
+		print('IP(1) : Go to http://%s:%d' % (ipLAN,port))
+		print('IP(2) : Go to http://%s:%d' % (ipWiFi,port))
 		server.serve_forever()
 	finally:
 		camera.stop_recording()
